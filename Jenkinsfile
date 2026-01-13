@@ -8,7 +8,7 @@ pipeline{
 
     environment {
         IMAGE_NAME = "manojkrishnappa/itkannadigaru-blogpost:${GIT_COMMIT}"
-        AWS_REGION = "us-west-2"
+        AWS_REGION = "ap-south-1"
         CLUSTER_NAME = "itkannadigaru-cluster"
         NAMESPACE = "itkannadigaru"
     }
@@ -16,7 +16,7 @@ pipeline{
     stages{
         stage('git-checkout'){
             steps{
-                git url: 'https://github.com/ManojKRISHNAPPA/ITKannadigaru-Java-based-app.git', branch: 'prod'
+                git url: 'https://github.com/amithachar/ITKannadigaru-Java.git', branch: 'prod'
             }
             
         }
@@ -82,7 +82,7 @@ pipeline{
 
         stage('Deploy to EKS cluster'){
             steps{
-                withKubeConfig(caCertificate: '', clusterName: 'itkannadigaru-cluster', contextName: '', credentialsId: 'kube', namespace: 'itkannadigaru', restrictKubeConfigAccess: false, serverUrl: 'https://F9B53AB4647378B291D4BE2833B0FFB1.gr7.us-west-2.eks.amazonaws.com'){
+                withKubeConfig(caCertificate: '', clusterName: 'itkannadigaru-cluster', contextName: '', credentialsId: 'kube', namespace: 'itkannadigaru', restrictKubeConfigAccess: false, serverUrl: 'https://73321B6F2B33F4D6E7C5AA8D4536212B.gr7.ap-south-1.eks.amazonaws.com'){
                     sh " sed -i 's|replace|${IMAGE_NAME}|g' deployment.yml "
                     sh " kubectl apply -f deployment.yml -n ${NAMESPACE}"
                 }
